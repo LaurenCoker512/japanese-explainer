@@ -1,3 +1,6 @@
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
+
 interface WordInputFormProps {
   word: string;
   age: number;
@@ -42,16 +45,24 @@ function WordInputForm({
           Age Level (5-18)
         </label>
         <div className="flex items-center mt-2 gap-3">
-          <input
-            type="range"
-            id="age"
-            min="5"
-            max="18"
-            value={age}
-            onChange={(e) => onAgeChange(Number(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
-            disabled={loading}
-          />
+          <div className="flex-1">
+            <Slider
+              min={5}
+              max={18}
+              value={age}
+              onChange={(value) => onAgeChange(Number(value))}
+              disabled={loading}
+              trackStyle={{ backgroundColor: "#6366f1", height: 8 }}
+              handleStyle={{
+                borderColor: "#6366f1",
+                height: 24,
+                width: 24,
+                marginTop: -8,
+                backgroundColor: "#fff",
+              }}
+              railStyle={{ backgroundColor: "#e5e7eb", height: 8 }}
+            />
+          </div>
           <span className="text-gray-800 w-10 text-center text-lg font-bold">
             {age}
           </span>
