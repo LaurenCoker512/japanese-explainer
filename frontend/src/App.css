@@ -51,3 +51,7 @@
 .read-the-docs {
   color: #888;
 }
+
+.response-display hr {
+  margin: 1rem 0;
+}

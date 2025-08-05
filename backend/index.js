@@ -60,7 +60,10 @@ app.post("/explain", async (req, res) => {
         {
           role: "system",
           content:
-            "You are a 1-response API. Your output must strictly be provided in markdown suitable for ReactMarkdown.",
+            `You are a 1-response API. Your output must strictly be provided in markdown suitable for ReactMarkdown.
+For all Japanese words that use kanji, annotate each kanji character with its hiragana reading in square brackets, immediately after the kanji, like this: 漢[かん]字[じ]は難[むずか]しい。
+Do this for every kanji character in your response, including in example sentences, headings, and explanations.
+Do not use any other furigana format.`.trim(),
         },
         {
           role: "user",

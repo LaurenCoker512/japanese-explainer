@@ -52,13 +52,15 @@ function WordInputForm({
               value={age}
               onChange={(value) => onAgeChange(Number(value))}
               disabled={loading}
-              trackStyle={{ backgroundColor: "#6366f1", height: 8 }}
-              handleStyle={{
-                borderColor: "#6366f1",
-                height: 24,
-                width: 24,
-                marginTop: -8,
-                backgroundColor: "#fff",
+              styles={{
+                track: { backgroundColor: "#2a5caa", height: 8 },
+                handle: {
+                  borderColor: "#2a5caa",
+                  height: 24,
+                  width: 24,
+                  marginTop: -8,
+                  backgroundColor: "#fff",
+                },
               }}
               railStyle={{ backgroundColor: "#e5e7eb", height: 8 }}
             />
