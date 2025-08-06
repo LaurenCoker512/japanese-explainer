@@ -9,7 +9,8 @@ function cleanExplanation(text: string) {
   let cleaned = text.replace(/'/g, "");
   cleaned = cleaned.replace(/\s*\+\s*/g, "");
   cleaned = cleaned.replace(/\\n/g, "\n");
-  cleaned = cleaned.replace(/\n\s+/g, "\n");
+  // Optionally, only remove leading tabs (not spaces) after newlines
+  cleaned = cleaned.replace(/\n\t+/g, "\n");
   // Ensure two blank lines before --- and headings (###, ##, #)
   cleaned = cleaned.replace(/([^\n])\n(---|#{1,6})/g, "$1\n\n$2");
   // Ensure two blank lines after --- and headings
@@ -37,34 +38,38 @@ function ResponseDisplay({ explanation }: ResponseDisplayProps) {
         <h2 className="text-xl font-semibold text-matcha-green mb-3">
           Explanation
         </h2>
-        <ReactMarkdown
-          components={{
-            p: ({ children }) => <Furigana text={flattenChildren(children)} />,
-            li: ({ children }) => (
-              <li>
+        <div className="text-left">
+          <ReactMarkdown
+            components={{
+              p: ({ children }) => (
                 <Furigana text={flattenChildren(children)} />
-              </li>
-            ),
-            // Optionally, add for headings if you want furigana there too:
-            h1: ({ children }) => (
-              <h1>
-                <Furigana text={flattenChildren(children)} />
-              </h1>
-            ),
-            h2: ({ children }) => (
-              <h2>
-                <Furigana text={flattenChildren(children)} />
-              </h2>
-            ),
-            h3: ({ children }) => (
-              <h3>
-                <Furigana text={flattenChildren(children)} />
-              </h3>
-            ),
-          }}
-        >
-          {cleaned}
-        </ReactMarkdown>
+              ),
+              li: ({ children }) => (
+                <li>
+                  <Furigana text={flattenChildren(children)} />
+                </li>
+              ),
+              // Optionally, add for headings if you want furigana there too:
+              h1: ({ children }) => (
+                <h1>
+                  <Furigana text={flattenChildren(children)} />
+                </h1>
+              ),
+              h2: ({ children }) => (
+                <h2>
+                  <Furigana text={flattenChildren(children)} />
+                </h2>
+              ),
+              h3: ({ children }) => (
+                <h3>
+                  <Furigana text={flattenChildren(children)} />
+                </h3>
+              ),
+            }}
+          >
+            {cleaned}
+          </ReactMarkdown>
+        </div>
       </div>
     </div>
   );

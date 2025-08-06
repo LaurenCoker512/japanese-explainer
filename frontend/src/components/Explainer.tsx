@@ -14,11 +14,29 @@ function Explainer() {
   const [error, setError] = useState("");
   const [response, setResponse] = useState<ApiResponse | null>(null);
 
+  const validateWord = (word: string) => {
+    // Check for reasonable length (1-10 characters is typical for most Japanese words)
+    if (word.length < 1 || word.length > 10) {
+      return false;
+    }
+
+    // Check if input contains only Japanese characters
+    const japaneseRegex =
+      /^[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF\uFF65-\uFF9F]+$/;
+    return japaneseRegex.test(word);
+  };
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!word.trim()) {
         setError("Please enter a Japanese word");
+        return;
+      }
+      if (!validateWord(word)) {
+        setError(
+          "Please enter a valid Japanese word (1-10 Japanese characters only)."
+        );
         return;
       }
       setLoading(true);

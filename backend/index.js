@@ -31,8 +31,44 @@ const redisClient = redis.createClient({
 });
 redisClient.connect().catch(console.error);
 
+async function isRealJapaneseWord(word) {
+  const response = await fetch(
+    `https://api.wanikani.com/v2/subjects?types=vocabulary&slugs=${word}`
+  );
+  const data = await response.json();
+  return data.total_count > 0;
+}
+
+function isValidJapaneseWord(word) {
+  // Check length
+  if (typeof word !== "string" || word.length < 1 || word.length > 10) {
+    return false;
+  }
+
+  // Japanese Unicode ranges:
+  // Hiragana: \u3040-\u309F
+  // Katakana: \u30A0-\u30FF
+  // Kanji: \u4E00-\u9FAF
+  // Half-width katakana: \uFF65-\uFF9F
+  return /^[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF\uFF65-\uFF9F]+$/.test(word);
+}
+
 app.post("/explain", async (req, res) => {
   const { word, age } = req.body;
+
+  // Validate the word before proceeding
+  if (!isValidJapaneseWord(word)) {
+    return res.status(400).json({
+      error:
+        "Invalid word. Please enter 1-10 Japanese characters (hiragana, katakana, kanji, or half-width katakana).",
+    });
+  }
+  if (!isRealJapaneseWord(word)) {
+    return res.status(400).json({
+      error: "Invalid word. Please enter a real Japanese word.",
+    });
+  }
+
   const cacheKey = `explanation:${word}:${age}`;
 
   try {
@@ -60,14 +96,30 @@ app.post("/explain", async (req, res) => {
         {
           role: "system",
           content:
-            `You are a 1-response API. Your output must strictly be provided in markdown suitable for ReactMarkdown.
-For all Japanese words that use kanji, annotate each kanji character with its hiragana reading in square brackets, immediately after the kanji, like this: 漢[かん]字[じ]は難[むずか]しい。
-Do this for every kanji character in your response, including in example sentences, headings, and explanations.
-Do not use any other furigana format.`.trim(),
+            `You are a Japanese language teaching API that provides exactly one response in markdown format. Follow these rules strictly:
+
+1. Output must be in clean markdown suitable for ReactMarkdown
+2. For all Japanese text:
+   - Annotate each kanji character with its hiragana reading in square brackets, placed immediately after the kanji
+   - Example: 漢[かん]字[じ]は難[むずか]しい
+3. Structure your response with these sections:
+   ## 言葉の説明
+   ## 使い方の例
+   ## 似ている言葉
+4. Keep explanations simple and age-appropriate for ${age}歳
+5. Example sentences should show natural usage
+6. For similar words, explain subtle differences in usage
+7. Never use any other furigana format
+8. Never add extra commentary or disclaimers`.trim(),
         },
         {
           role: "user",
-          content: `私が${age}歳かのように日本語で漢字でいくつか例とどうやって「${word}」っていう言葉を使うのか？ この言葉に一番近い言葉はなんですか。`,
+          content: `「${word}」という言葉を${age}歳の学習者に教えるように、以下の内容を日本語で分かりやすく説明してください：
+1. 簡単な定義（年齢に合った言葉で）
+2. 3つの自然な例文（会話形式を含む）
+3. 最も近い類義語とその微妙な違い
+
+全ての漢字には直後にひらがなルビを[ ]で記述してください。`,
         },
       ],
     });
