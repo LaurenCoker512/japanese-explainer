@@ -60,7 +60,7 @@ function Explainer() {
     <div className="min-h-dvh bg-soft-washi py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl overflow-hidden md:max-w-2xl p-8">
         <h1 className="text-3xl font-bold text-center text-dark-gray mb-8 tracking-tight">
-          Japanese Vocabulary Practice
+          日本語を練習しましょう！
         </h1>
         <WordInputForm
           word={word}

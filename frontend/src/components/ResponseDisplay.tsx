@@ -34,6 +34,11 @@ function ResponseDisplay({ explanation }: ResponseDisplayProps) {
                   <Furigana text={flattenChildren(children)} />
                 </li>
               ),
+              blockquote: ({ children }) => (
+                <blockquote>
+                  <Furigana text={flattenChildren(children)} />
+                </blockquote>
+              ),
               h1: ({ children }) => (
                 <h1>
                   <Furigana text={flattenChildren(children)} />
