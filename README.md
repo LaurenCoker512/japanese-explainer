@@ -70,15 +70,10 @@ VITE_USE_MOCK_API=false # Set to true to use mock API
 ### Backend
 
 - `npm start` — Start the backend server (Express, port 5001)
-- `npm run build` — Compile TypeScript (if using TS)
-- `npm test` — Run backend tests (if implemented)
 
 ### Frontend
 
 - `npm run dev` — Start the frontend dev server (Vite, port 5173)
-- `npm run build` — Build the frontend for production
-- `npm run preview` — Preview the production build
-- `npm run lint` — Run linter
 
 ---
 
@@ -104,7 +99,6 @@ VITE_USE_MOCK_API=false # Set to true to use mock API
 
 - Japanese word explanation and examples
 - Furigana rendering for kanji
-- User authentication (signup/login)
 - PostgreSQL and Redis integration
 - OpenAI-powered backend
 - Modern React frontend with Tailwind CSS
